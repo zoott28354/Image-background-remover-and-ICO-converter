@@ -27,17 +27,15 @@ if errorlevel 1 (
 )
 
 echo.
-echo Creating start.vbs in root...
+echo Creating start.bat in root...
 (
-    echo Dim sDir, oShell
-    echo sDir = Left^(WScript.ScriptFullName, InStrRev^(WScript.ScriptFullName, "\"^)^)
-    echo Set oShell = CreateObject^("WScript.Shell"^)
-    echo oShell.Run """" ^& sDir ^& "venv\Scripts\pythonw.exe"" """ ^& sDir ^& "src\main.py""", 0, False
-) > "%~dp0..\start.vbs"
+    echo @echo off
+    echo start "" "%%~dp0venv\Scripts\pythonw.exe" "%%~dp0src\main.py"
+) > "%~dp0..\start.bat"
 
 echo.
 echo ==========================================
 echo  Setup complete.
-echo  Use start.vbs in the root to launch the app.
+echo  Use start.bat in the root to launch the app.
 echo ==========================================
 pause

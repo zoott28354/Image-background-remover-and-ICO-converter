@@ -11,7 +11,7 @@ This file contains instructions to follow every time you work on this project.
 ## Project Structure
 ```
 scripts/              # Developer toolchain (setup, build)
-  setup.bat           # Creates venv, installs deps, generates start.vbs in root
+  setup.bat           # Creates venv, installs deps, generates start.bat in root
   build.bat           # PyInstaller build — always cd to root automatically
   version_info.txt    # Windows exe metadata
 src/
@@ -64,6 +64,6 @@ tests/
 
 ## What NOT to Do
 - Do not hardcode absolute paths — use `_resource_path()` or `os.path.join()`
-- Do not commit `venv/`, `dist/`, `build/`, `start.vbs`
+- Do not commit `venv/`, `dist/`, `build/`, `start.bat`
 - Do not use global variables
 - Do not leave commented-out code without explanation
