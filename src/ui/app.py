@@ -1,4 +1,3 @@
-import ctypes
 import os
 import sys
 import threading
@@ -143,10 +142,7 @@ def _t(key: str) -> str:
     return STRINGS.get(_lang, STRINGS["en"]).get(key, key)
 
 
-def _resource_path(name: str) -> str:
-    """Resolves resource path both in script mode and inside PyInstaller exe."""
-    base = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base, name)
+from utils.path_utils import resource_path as _resource_path
 
 
 class Tooltip:
@@ -202,7 +198,7 @@ class Tooltip:
         self._showing = False
 
 
-from core import elabora_file, SUPPORTED_EXT, MODELLI_REMBG, MODELLO_DEFAULT
+from core.core import elabora_file, SUPPORTED_EXT, MODELLI_REMBG, MODELLO_DEFAULT
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -211,9 +207,8 @@ ctk.set_default_color_theme("blue")
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('RembgExporter.App')
         self.title("RembgExporter")
-        self.iconbitmap(_resource_path(os.path.join('src', 'assets', 'RembgExporter.ico')))
+        self.iconbitmap(_resource_path(os.path.join('assets', 'RembgExporter.ico')))
         self.geometry("1250x700")
         self.minsize(1100, 650)
         self.resizable(True, True)
@@ -906,7 +901,7 @@ class App(ctk.CTk):
                 formato: str = None, qualita: int = 85, store: str = None):
         totale = len(files)
 
-        from core import converti_formato_batch, genera_favicon_batch, genera_app_store_icons_batch
+        from core.core import converti_formato_batch, genera_favicon_batch, genera_app_store_icons_batch
 
         log_fn = lambda msg: self.after(0, self._log, msg)
 
@@ -952,6 +947,3 @@ class App(ctk.CTk):
         self._set_ui_busy(False)
 
 
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()

@@ -10,17 +10,22 @@ This file contains instructions to follow every time you work on this project.
 
 ## Project Structure
 ```
-scripts/          # Developer toolchain (setup, build)
-  setup.bat       # Creates venv, installs deps, generates start.vbs in root
-  build.bat       # PyInstaller build — run from scripts/, cd to root automatically
-  version_info.txt
+scripts/              # Developer toolchain (setup, build)
+  setup.bat           # Creates venv, installs deps, generates start.vbs in root
+  build.bat           # PyInstaller build — always cd to root automatically
+  version_info.txt    # Windows exe metadata
 src/
-  assets/         # Static resources
+  main.py             # Entry point — adds src/ to sys.path, launches App
+  ui/
+    app.py            # GUI — CustomTkinter, 3-column layout
+  core/
+    core.py           # Processing pipeline — ImageMagick, rembg, PIL
+  utils/
+    path_utils.py     # resource_path() — resolves assets in dev and PyInstaller
+  assets/
     RembgExporter.ico
-  third-party/    # Portable executables bundled with the project
+  third-party/        # Portable executables bundled with the project
     imagemagick/
-app.py            # GUI — CustomTkinter, 3-column layout
-core.py           # Processing pipeline — ImageMagick, rembg, PIL
 requirements.txt
 tests/
 ```
@@ -32,8 +37,8 @@ tests/
 - All code, comments and UI default in **English**; Italian available via IT/EN switcher
 
 ## Key Patterns (do NOT change without asking)
-- `_resource_path(name)` in `app.py` — resolves asset paths in dev and PyInstaller exe
-- `_get_imagemagick_path()` in `core.py` — finds magick.exe in src/third-party or system PATH
+- `resource_path(name)` in `src/utils/path_utils.py` — resolves paths relative to `src/` in dev, `_MEIPASS` in exe
+- `_get_imagemagick_path()` in `src/core/core.py` — finds magick.exe in src/third-party or system PATH
 - `_t(key)` + `STRINGS` dict — i18n system, always add both EN and IT keys together
 - `_tt(widget, key)` — registers tooltips for automatic language updates
 - `log_fn` callback pattern — never use print() inside core.py functions

@@ -204,8 +204,8 @@ def _get_imagemagick_path():
     # 1. Try third-party/imagemagick folder in the project
     base_dir = os.path.dirname(__file__)
     portable_paths = [
-        os.path.join(base_dir, 'src', 'third-party', 'imagemagick', 'magick.exe'),
-        os.path.join(base_dir, '..', 'src', 'third-party', 'imagemagick', 'magick.exe'),
+        # __file__ is src/core/core.py → go up one level to reach src/third-party
+        os.path.join(base_dir, '..', 'third-party', 'imagemagick', 'magick.exe'),
     ]
     for path in portable_paths:
         if os.path.exists(path):

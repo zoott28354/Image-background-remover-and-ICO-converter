@@ -30,9 +30,10 @@ venv\Scripts\python.exe -m PyInstaller --onefile --windowed ^
   --copy-metadata Pillow ^
   --copy-metadata numpy ^
   --hidden-import=click ^
-  --add-data "src\assets\RembgExporter.ico;src\assets" ^
+  --paths src ^
+  --add-data "src\assets;assets" ^
   --add-data "src\third-party\imagemagick;imagemagick" ^
-  app.py
+  src\main.py
 
 echo.
 if exist "dist\RembgExporter.exe" (

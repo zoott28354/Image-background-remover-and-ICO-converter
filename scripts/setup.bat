@@ -32,7 +32,7 @@ echo Creating start.vbs in root...
     echo Dim sDir, oShell
     echo sDir = Left^(WScript.ScriptFullName, InStrRev^(WScript.ScriptFullName, "\"^)^)
     echo Set oShell = CreateObject^("WScript.Shell"^)
-    echo oShell.Run """" ^& sDir ^& "venv\Scripts\pythonw.exe"" """ ^& sDir ^& "app.py""", 0, False
+    echo oShell.Run """" ^& sDir ^& "venv\Scripts\pythonw.exe"" """ ^& sDir ^& "src\main.py""", 0, False
 ) > "%~dp0..\start.vbs"
 
 echo.
