@@ -63,7 +63,7 @@ tests/
 - `bump:` version update
 
 ## What NOT to Do
-- Do not hardcode absolute paths — use `_resource_path()` or `os.path.join()`
+- Do not hardcode absolute paths — use `resource_path()` from `src/utils/path_utils.py` or `os.path.join()`
 - Do not commit `venv/`, `dist/`, `build/`, `start.bat`
 - Do not use global variables
 - Do not leave commented-out code without explanation
