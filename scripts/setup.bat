@@ -11,7 +11,7 @@ echo ==========================================
 
 echo.
 echo Creating virtual environment...
-python -m venv venv
+python -m venv --upgrade-deps venv
 if errorlevel 1 (
     echo ERROR: cannot create venv. Make sure Python is installed.
     pause
