@@ -225,7 +225,8 @@ Starts the app using `pythonw.exe` — no CMD window. Generated automatically by
 scripts\build.bat
 ```
 
-Generates `dist\RembgExporter.exe` via PyInstaller — single executable, no installation required.
+Generates `dist\RembgExporter_V<version>.exe` via PyInstaller — single executable, no installation required.
+The version is read automatically from `scripts\version_info.txt` (e.g. `RembgExporter_V1.0.0.exe`).
 
 **Included in the distribution:**
 - ✅ All Python dependencies (rembg, Pillow, customtkinter, svglib, reportlab, etc.)

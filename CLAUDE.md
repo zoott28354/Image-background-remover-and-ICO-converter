@@ -53,6 +53,12 @@ tests/
 - Do not rename existing files without asking first
 - Do not create files outside the defined structure
 
+## Versioning
+- Version source of truth: `scripts/version_info.txt` (fields `FileVersion` and `ProductVersion`)
+- To release a new version: update both fields in `version_info.txt`, then commit with `bump:`
+- Build output is automatically named `dist\RembgExporter_V<version>.exe` (e.g. `RembgExporter_V1.0.0.exe`)
+- `setup.bat` uses `--upgrade-deps` so pip/setuptools in the venv are always up to date
+
 ## Commit Conventions
 - `feat:` new feature
 - `fix:` bug fix
