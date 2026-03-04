@@ -26,7 +26,7 @@ venv\Scripts\python.exe -m PyInstaller --onefile --windowed ^
   --icon=src\assets\RembgExporter.ico ^
   --name=%EXE_NAME% ^
   --version-file=scripts\version_info.txt ^
-  --collect-all customtkinter ^
+  --collect-all PySide6 ^
   --collect-all rembg ^
   --collect-all svglib ^
   --collect-all reportlab ^

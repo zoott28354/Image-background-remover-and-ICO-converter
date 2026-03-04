@@ -16,9 +16,8 @@ if sys.platform == "win32":
 
 def main() -> None:
     """Launch the RembgExporter GUI."""
-    from ui.app import App
-    app = App()
-    app.mainloop()
+    from ui.app import run
+    run()
 
 
 if __name__ == "__main__":
