@@ -515,7 +515,7 @@ class App(QMainWindow):
         super().__init__()
         self.setWindowTitle("RembgExporter")
         ico_path = _resource_path(os.path.join('assets', 'RembgExporter.ico'))
-        if os.path.exists(ico_path):
+        if os.path.isabs(ico_path) and os.path.exists(ico_path):
             self.setWindowIcon(QIcon(ico_path))
         self.resize(1250, 700)
         self.setMinimumSize(1100, 650)
