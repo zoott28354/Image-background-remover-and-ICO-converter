@@ -160,12 +160,10 @@ QMainWindow {
     background-color: #1e1e1e;
 }
 QFrame#sidebar {
-    background-color: #2a2a2a;
-    border-radius: 8px;
+    background-color: transparent;
 }
 QFrame#panel {
-    background-color: #2a2a2a;
-    border-radius: 8px;
+    background-color: transparent;
 }
 QPushButton {
     background-color: #1f538d;
