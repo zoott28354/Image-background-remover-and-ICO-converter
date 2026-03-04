@@ -199,36 +199,46 @@ def _render_svg_to_png(svg_path: str) -> Image.Image:
     return img
 
 
-def _get_imagemagick_path():
-    """Find the ImageMagick executable (portable or system)."""
-    # 1. Try third-party/imagemagick folder in the project
-    base_dir = os.path.dirname(__file__)
-    portable_paths = [
-        # __file__ is src/core/core.py → go up one level to reach src/third-party
-        os.path.join(base_dir, '..', 'third-party', 'imagemagick', 'magick.exe'),
-    ]
-    for path in portable_paths:
-        if os.path.exists(path):
-            return path
+def _get_imagemagick_path() -> str:
+    """Find the ImageMagick executable (portable bundle on Windows, system on Linux/macOS)."""
 
-    # 2. Try imagemagick folder in dist (PyInstaller)
-    if getattr(sys, 'frozen', False):
-        dist_path = os.path.join(sys._MEIPASS, 'imagemagick', 'magick.exe')
-        if os.path.exists(dist_path):
-            return dist_path
+    if sys.platform == "win32":
+        # 1. Portable bundle: src/third-party/imagemagick/magick.exe
+        base_dir = os.path.dirname(__file__)
+        portable = os.path.normpath(
+            os.path.join(base_dir, '..', 'third-party', 'imagemagick', 'magick.exe'))
+        if os.path.exists(portable):
+            return portable
 
-    # 3. Try system PATH
-    try:
-        subprocess.run(['magick', '--version'], capture_output=True, check=True, creationflags=_NO_WINDOW)
-        return 'magick'
-    except (FileNotFoundError, subprocess.CalledProcessError):
-        pass
+        # 2. PyInstaller dist bundle
+        if getattr(sys, 'frozen', False):
+            dist = os.path.join(sys._MEIPASS, 'imagemagick', 'magick.exe')
+            if os.path.exists(dist):
+                return dist
 
-    raise FileNotFoundError(
-        "ImageMagick not found! Make sure to:\n"
-        "1. Extract the .7z file into 'third-party/imagemagick/'\n"
-        "2. Or install ImageMagick globally"
-    )
+        # 3. System PATH (Windows)
+        candidates = ['magick']
+    else:
+        # Linux / macOS: ImageMagick 7 → 'magick', ImageMagick 6 → 'convert'
+        candidates = ['magick', 'convert']
+
+    for cmd in candidates:
+        try:
+            subprocess.run(
+                [cmd, '--version'], capture_output=True, check=True,
+                creationflags=_NO_WINDOW)
+            return cmd
+        except (FileNotFoundError, subprocess.CalledProcessError, OSError):
+            pass
+
+    if sys.platform == "win32":
+        hint = "Add magick.exe to src/third-party/imagemagick/ or install ImageMagick globally."
+    elif sys.platform == "darwin":
+        hint = "Install with: brew install imagemagick"
+    else:
+        hint = "Install with: sudo apt install imagemagick"
+
+    raise FileNotFoundError(f"ImageMagick not found. {hint}")
 
 
 def salva_ico(img: Image.Image, output_path: str):
