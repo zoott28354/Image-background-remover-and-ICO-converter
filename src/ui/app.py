@@ -528,6 +528,7 @@ class App(QMainWindow):
         self._tooltips: list[tuple] = []   # (widget, key)
         self._worker_thread: _Worker | None = None
 
+        self.setAcceptDrops(True)
         self._build_ui()
         self._set_texts()
         self._on_modalita_change()
@@ -943,6 +944,36 @@ class App(QMainWindow):
             self._selected_file = self._file_list[0]
             self._aggiorna_preview()
         self._render_file_list()
+
+    def dragEnterEvent(self, event) -> None:
+        """Accept drag if it contains at least one supported image file."""
+        if event.mimeData().hasUrls():
+            urls = event.mimeData().urls()
+            if any(url.toLocalFile().lower().endswith(tuple(SUPPORTED_EXT))
+                   for url in urls if url.isLocalFile()):
+                event.acceptProposedAction()
+                return
+        event.ignore()
+
+    def dropEvent(self, event) -> None:
+        """Add dropped image files to the list."""
+        added = False
+        first_new: str | None = None
+        for url in event.mimeData().urls():
+            if not url.isLocalFile():
+                continue
+            path = url.toLocalFile()
+            if path.lower().endswith(tuple(SUPPORTED_EXT)) and path not in self._file_list:
+                self._file_list.append(path)
+                if first_new is None:
+                    first_new = path
+                added = True
+        if added:
+            if self._selected_file is None and first_new:
+                self._selected_file = first_new
+                self._aggiorna_preview()
+            self._render_file_list()
+        event.acceptProposedAction()
 
     def _rimuovi_file(self, path: str) -> None:
         self._file_list.remove(path)
