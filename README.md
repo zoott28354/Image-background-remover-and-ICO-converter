@@ -3,7 +3,7 @@
 **Author:** [zoott28354](https://github.com/zoott28354)
 **Repository:** [rembgexporter](https://github.com/zoott28354/rembgexporter)
 
-3-panel GUI tool to process images in 4 different modes:
+Cross-platform (Windows / Linux / macOS) 3-panel GUI tool to process images in 4 different modes:
 - **Convert ICO**: Multi-resolution Windows icons with AI background removal
 - **Favicon Generator**: Complete web favicons with PWA manifest.json
 - **App Store Icons**: Optimized icons for Google Play, Apple Store, Microsoft Store
@@ -175,7 +175,7 @@ rembgexporter/
 ├── src/
 │   ├── main.py                     # Entry point
 │   ├── ui/
-│   │   └── app.py                  # GUI interface (CustomTkinter)
+│   │   └── app.py                  # GUI interface (PySide6)
 │   ├── core/
 │   │   └── core.py                 # Image processing pipeline
 │   ├── utils/
@@ -205,17 +205,26 @@ scripts\setup.bat
 
 **Requirements:** Python 3.10+ installed on the system.
 
-> **ImageMagick** is already included in the repository (`src/third-party/imagemagick/magick.exe`) — no additional download required.
+> **Windows:** ImageMagick is already included (`src/third-party/imagemagick/magick.exe`) — no additional download required.
+>
+> **Linux:** Install ImageMagick via `sudo apt install imagemagick`.
+>
+> **macOS:** Install ImageMagick via `brew install imagemagick`.
 
 ---
 
 ## Launch
 
+**Windows:**
 ```bat
 start.bat
 ```
-
 Starts the app using `pythonw.exe` — no CMD window. Generated automatically by `scripts\setup.bat`.
+
+**Linux / macOS:**
+```bash
+python3 src/main.py
+```
 
 ---
 
@@ -229,7 +238,7 @@ Generates `dist\RembgExporter_V<version>.exe` via PyInstaller — single executa
 The version is read automatically from `scripts\version_info.txt` (e.g. `RembgExporter_V1.0.0.exe`).
 
 **Included in the distribution:**
-- ✅ All Python dependencies (rembg, Pillow, customtkinter, svglib, reportlab, etc.)
+- ✅ All Python dependencies (rembg, Pillow, PySide6, svglib, reportlab, etc.)
 - ✅ **ImageMagick 7.1.2** (for perfect ICO creation)
 - ✅ Windows metadata (author, copyright, GitHub URL visible in Properties → Details)
 
@@ -247,7 +256,7 @@ The version is read automatically from `scripts\version_info.txt` (e.g. `RembgEx
 | `rembg` | AI background removal |
 | `Pillow` | Image manipulation |
 | `onnxruntime` | AI model execution (CPU) |
-| `customtkinter` | Modern GUI |
+| `PySide6` | Cross-platform GUI (LGPL) |
 | `svglib` + `reportlab` | SVG to PNG rendering |
 | `pyinstaller` | Portable exe build |
 
@@ -264,7 +273,7 @@ The version is read automatically from `scripts\version_info.txt` (e.g. `RembgEx
 | Technology | Usage |
 |---|---|
 | **Python 3.10+** | Main language |
-| **CustomTkinter** | Modern GUI with sidebar layout |
+| **PySide6** | Cross-platform GUI with dark theme (LGPL) |
 | **rembg** | AI background removal (deep neural networks) |
 | **Pillow (PIL)** | Image manipulation and color profiles |
 | **ImageMagick CLI** | Batch processing, multi-frame ICO creation, format conversion |

@@ -36,6 +36,9 @@ venv\Scripts\python.exe -m PyInstaller --onefile --windowed ^
   --copy-metadata Pillow ^
   --copy-metadata numpy ^
   --hidden-import=click ^
+  --hidden-import=PySide6.QtSvg ^
+  --hidden-import=PySide6.QtXml ^
+  --hidden-import=PIL.ImageQt ^
   --paths src ^
   --add-data "src\assets;assets" ^
   --add-data "src\third-party\imagemagick;imagemagick" ^
