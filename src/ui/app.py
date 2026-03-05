@@ -563,19 +563,17 @@ class App(QMainWindow):
             self._lang_btns[lang.lower()] = btn
         left_layout.addLayout(hdr)
 
-        # Add / Clear buttons
-        btn_row = QHBoxLayout()
+        # Add / Clear buttons (vertical stack — avoids text clipping in any language)
         self.btn_aggiungi = QPushButton()
         self._tt(self.btn_aggiungi, "add_tooltip")
         self.btn_aggiungi.clicked.connect(self._aggiungi)
-        btn_row.addWidget(self.btn_aggiungi)
+        left_layout.addWidget(self.btn_aggiungi)
 
         self.btn_pulisci = QPushButton()
         self.btn_pulisci.setObjectName("btn_secondary")
         self._tt(self.btn_pulisci, "clear_tooltip")
         self.btn_pulisci.clicked.connect(self._pulisci)
-        btn_row.addWidget(self.btn_pulisci)
-        left_layout.addLayout(btn_row)
+        left_layout.addWidget(self.btn_pulisci)
 
         # File list scroll area
         self._scroll_area = QScrollArea()
