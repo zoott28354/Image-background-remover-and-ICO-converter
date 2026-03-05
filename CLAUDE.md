@@ -19,7 +19,7 @@ scripts/              # Developer toolchain (setup, build)
 src/
   main.py             # Entry point — adds src/ to sys.path, launches App
   ui/
-    app.py            # GUI — CustomTkinter, 3-column layout
+    app.py            # GUI — PySide6, 3-column layout
   core/
     core.py           # Processing pipeline — ImageMagick, rembg, PIL
   utils/
@@ -44,6 +44,109 @@ tests/
 - `_t(key)` + `STRINGS` dict — i18n system, always add both EN and IT keys together
 - `_tt(widget, key)` — registers tooltips for automatic language updates
 - `log_fn` callback pattern — never use print() inside core.py functions
+
+## About Button Pattern (reusable for future apps)
+
+A small circular `?` button placed inline with a section header opens an About dialog with app info and a clickable GitHub link.
+
+### 1. Top-level constants in `app.py`
+```python
+_GITHUB_URL  = "https://github.com/<user>/<repo>"
+_APP_AUTHOR  = "<username>"
+_APP_LICENSE = "MIT"
+_APP_VERSION = _read_version()
+```
+
+### 2. `_read_version()` — reads version from `scripts/version_info.txt`
+```python
+def _read_version() -> str:
+    import re
+    try:
+        vf = _resource_path('..', 'scripts', 'version_info.txt')
+        with open(vf, encoding='utf-8') as f:
+            m = re.search(r"ProductVersion.*?'([0-9]+\.[0-9]+\.[0-9]+)'", f.read())
+            if m:
+                return m.group(1)
+    except Exception:
+        pass
+    return "1.0.0"  # fallback — update to current version at build time
+```
+> In PyInstaller exe mode `version_info.txt` is not in `_MEIPASS`, so the fallback is used. Keep it in sync with the real version when building.
+
+### 3. QSS rule (add inside `DARK_STYLE`)
+```css
+QPushButton#btn_about {
+    background-color: transparent;
+    color: #666666;
+    border: 1px solid #555555;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 0px;
+    min-width: 18px; max-width: 18px;
+    min-height: 18px; max-height: 18px;
+}
+QPushButton#btn_about:hover { color: #aaaaaa; border-color: #888888; }
+```
+
+### 4. Header row in `_build_ui()`
+Replace a plain `QLabel` header with a `QHBoxLayout` row containing the label and the button:
+```python
+preview_hdr_row = QWidget()
+preview_hdr_row.setStyleSheet("background: transparent;")
+preview_hdr_layout = QHBoxLayout(preview_hdr_row)
+preview_hdr_layout.setContentsMargins(0, 0, 0, 0)
+preview_hdr_layout.setSpacing(4)
+self.lbl_preview_header = QLabel()
+self.lbl_preview_header.setObjectName("lbl_section")
+preview_hdr_layout.addWidget(self.lbl_preview_header, stretch=1)
+self.btn_about = QPushButton("?")
+self.btn_about.setObjectName("btn_about")
+self.btn_about.setFixedSize(18, 18)
+self.btn_about.setCursor(Qt.CursorShape.PointingHandCursor)
+self.btn_about.clicked.connect(self._show_about)
+self._tt(self.btn_about, "about_tooltip")
+preview_hdr_layout.addWidget(self.btn_about)
+parent_layout.addWidget(preview_hdr_row)
+```
+
+### 5. `_show_about()` method
+```python
+def _show_about(self) -> None:
+    dlg = QDialog(self)
+    dlg.setWindowTitle(_t("about_title"))
+    dlg.setFixedWidth(300)
+    layout = QVBoxLayout(dlg)
+    layout.setSpacing(12)
+    lbl = QLabel(
+        f"<b>AppName</b> v{_APP_VERSION}<br><br>"
+        f"{_t('about_desc')}<br><br>"
+        f"<b>{_t('about_author')}</b> {_APP_AUTHOR}<br>"
+        f"<b>{_t('about_license')}</b> {_APP_LICENSE}<br><br>"
+        f"<a href='{_GITHUB_URL}' style='color:#4a9eff;'>{_GITHUB_URL}</a>"
+    )
+    lbl.setWordWrap(True)
+    lbl.setOpenExternalLinks(True)
+    lbl.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+    layout.addWidget(lbl)
+    btn_close = QPushButton(_t("about_close"))
+    btn_close.clicked.connect(dlg.accept)
+    layout.addWidget(btn_close)
+    dlg.exec()
+```
+
+### 6. i18n keys to add in `STRINGS` (both EN and IT)
+```python
+"about_tooltip": "About / GitHub",          # IT: "Informazioni / GitHub"
+"about_title":   "About AppName",            # IT: "Informazioni su AppName"
+"about_desc":    "Short description here.",  # IT: "Descrizione breve."
+"about_author":  "Author:",                  # IT: "Autore:"
+"about_license": "License:",                 # IT: "Licenza:"
+"about_close":   "Close",                    # IT: "Chiudi"
+```
+
+### 7. Required import
+Add `QDialog` to the `from PySide6.QtWidgets import (...)` block.
 
 ## scripts/ Rules
 > **All `.bat` in `scripts/` must start with `cd /d "%~dp0.."` as first operation.**
