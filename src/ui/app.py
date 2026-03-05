@@ -12,7 +12,9 @@ from PySide6.QtGui import QFont, QPixmap, QPainter, QColor, QIcon
 
 from utils.path_utils import resource_path as _resource_path
 
-_GITHUB_URL = "https://github.com/zoott28354/rembgexporter"
+_GITHUB_URL  = "https://github.com/zoott28354/rembgexporter"
+_APP_AUTHOR  = "zoott28354"
+_APP_LICENSE = "MIT"
 
 
 def _read_version() -> str:
@@ -100,6 +102,8 @@ STRINGS = {
         "about_tooltip":  "About / GitHub",
         "about_title":    "About RembgExporter",
         "about_desc":     "AI-powered background removal and image conversion tool.",
+        "about_author":   "Author:",
+        "about_license":  "License:",
         "about_close":    "Close",
     },
     "it": {
@@ -167,6 +171,8 @@ STRINGS = {
         "about_tooltip":  "Informazioni / GitHub",
         "about_title":    "Informazioni su RembgExporter",
         "about_desc":     "Strumento AI per la rimozione dello sfondo e la conversione di immagini.",
+        "about_author":   "Autore:",
+        "about_license":  "Licenza:",
         "about_close":    "Chiudi",
     },
 }
@@ -1055,6 +1061,8 @@ class App(QMainWindow):
         lbl = QLabel(
             f"<b>RembgExporter</b> v{_APP_VERSION}<br><br>"
             f"{_t('about_desc')}<br><br>"
+            f"<b>{_t('about_author')}</b> {_APP_AUTHOR}<br>"
+            f"<b>{_t('about_license')}</b> {_APP_LICENSE}<br><br>"
             f"<a href='{_GITHUB_URL}' style='color:#4a9eff;'>{_GITHUB_URL}</a>"
         )
         lbl.setWordWrap(True)
