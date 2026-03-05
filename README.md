@@ -1,13 +1,8 @@
 # RembgExporter
 
-**Author:** [zoott28354](https://github.com/zoott28354)
-**Repository:** [rembgexporter](https://github.com/zoott28354/rembgexporter)
+**RembgExporter** is a desktop app that removes backgrounds from images using AI and converts them into the format you need — Windows icons, web favicons, app store assets, or common image formats like PNG, WebP and JPG.
 
-Cross-platform (Windows / Linux / macOS) 3-panel GUI tool to process images in 4 different modes:
-- **Convert ICO**: Multi-resolution Windows icons with AI background removal
-- **Favicon Generator**: Complete web favicons with PWA manifest.json
-- **App Store Icons**: Optimized icons for Google Play, Apple Store, Microsoft Store
-- **Format Conversion**: Batch conversion between PNG, JPG, WebP, GIF with quality control and background removal
+It works on **Windows, Linux and macOS**, it's free and open source.
 
 ---
 
