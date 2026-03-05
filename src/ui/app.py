@@ -12,8 +12,24 @@ from PySide6.QtGui import QFont, QPixmap, QPainter, QColor, QIcon
 
 from utils.path_utils import resource_path as _resource_path
 
-_APP_VERSION = "1.1.0"
-_GITHUB_URL  = "https://github.com/zoott28354/rembgexporter"
+_GITHUB_URL = "https://github.com/zoott28354/rembgexporter"
+
+
+def _read_version() -> str:
+    """Read ProductVersion from scripts/version_info.txt (dev mode only; fallback in exe)."""
+    import re
+    try:
+        vf = _resource_path('..', 'scripts', 'version_info.txt')
+        with open(vf, encoding='utf-8') as f:
+            m = re.search(r"ProductVersion.*?'([0-9]+\.[0-9]+\.[0-9]+)'", f.read())
+            if m:
+                return m.group(1)
+    except Exception:
+        pass
+    return "1.1.0"  # fallback (correct at build time)
+
+
+_APP_VERSION = _read_version()
 
 # ── i18n ──────────────────────────────────────────────────────────────────────
 _lang = "en"
