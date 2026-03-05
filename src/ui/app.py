@@ -5,12 +5,15 @@ from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QHBoxLayout, QVBoxLayout,
     QLabel, QPushButton, QCheckBox, QRadioButton, QButtonGroup,
     QSlider, QComboBox, QLineEdit, QTextEdit, QFrame, QFileDialog,
-    QProgressBar, QScrollArea, QSizePolicy,
+    QProgressBar, QScrollArea, QSizePolicy, QDialog,
 )
 from PySide6.QtCore import Qt, Signal, QObject, QTimer, QThread
 from PySide6.QtGui import QFont, QPixmap, QPainter, QColor, QIcon
 
 from utils.path_utils import resource_path as _resource_path
+
+_APP_VERSION = "1.1.0"
+_GITHUB_URL  = "https://github.com/zoott28354/rembgexporter"
 
 # ── i18n ──────────────────────────────────────────────────────────────────────
 _lang = "en"
@@ -77,6 +80,11 @@ STRINGS = {
         "desc_u2net":                 "Fast, ideal for large non-critical batches",
         "desc_u2net_human_seg":       "Optimized for human subjects",
         "desc_isnet-anime":           "For illustrations, cartoons and anime",
+        # About dialog
+        "about_tooltip":  "About / GitHub",
+        "about_title":    "About RembgExporter",
+        "about_desc":     "AI-powered background removal and image conversion tool.",
+        "about_close":    "Close",
     },
     "it": {
         "images_label":          "Immagini",
@@ -139,6 +147,11 @@ STRINGS = {
         "desc_u2net":                 "Veloce, ideale per batch grandi non critici",
         "desc_u2net_human_seg":       "Ottimizzato per soggetti umani",
         "desc_isnet-anime":           "Per illustrazioni, cartoon e anime",
+        # Finestra About
+        "about_tooltip":  "Informazioni / GitHub",
+        "about_title":    "Informazioni su RembgExporter",
+        "about_desc":     "Strumento AI per la rimozione dello sfondo e la conversione di immagini.",
+        "about_close":    "Chiudi",
     },
 }
 
@@ -237,6 +250,23 @@ QPushButton#btn_remove_file {
 QPushButton#btn_remove_file:hover {
     background-color: #553333;
     color: #ff8888;
+}
+QPushButton#btn_about {
+    background-color: transparent;
+    color: #666666;
+    border: 1px solid #555555;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 0px;
+    min-width: 18px;
+    max-width: 18px;
+    min-height: 18px;
+    max-height: 18px;
+}
+QPushButton#btn_about:hover {
+    color: #aaaaaa;
+    border-color: #888888;
 }
 QRadioButton, QCheckBox {
     spacing: 8px;
@@ -810,9 +840,22 @@ class App(QMainWindow):
         right_layout.setContentsMargins(8, 10, 8, 10)
         right_layout.setSpacing(4)
 
+        preview_hdr_row = QWidget()
+        preview_hdr_row.setStyleSheet("background: transparent;")
+        preview_hdr_layout = QHBoxLayout(preview_hdr_row)
+        preview_hdr_layout.setContentsMargins(0, 0, 0, 0)
+        preview_hdr_layout.setSpacing(4)
         self.lbl_preview_header = QLabel()
         self.lbl_preview_header.setObjectName("lbl_section")
-        right_layout.addWidget(self.lbl_preview_header)
+        preview_hdr_layout.addWidget(self.lbl_preview_header, stretch=1)
+        self.btn_about = QPushButton("?")
+        self.btn_about.setObjectName("btn_about")
+        self.btn_about.setFixedSize(18, 18)
+        self.btn_about.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_about.clicked.connect(self._show_about)
+        self._tt(self.btn_about, "about_tooltip")
+        preview_hdr_layout.addWidget(self.btn_about)
+        right_layout.addWidget(preview_hdr_row)
 
         self.lbl_preview_orig_label = QLabel()
         self.lbl_preview_orig_label.setObjectName("lbl_muted")
@@ -985,6 +1028,27 @@ class App(QMainWindow):
         self._selected_file = None
         self._aggiorna_preview()
         self._render_file_list()
+
+    def _show_about(self) -> None:
+        """Show About dialog with app info and GitHub link."""
+        dlg = QDialog(self)
+        dlg.setWindowTitle(_t("about_title"))
+        dlg.setFixedWidth(300)
+        layout = QVBoxLayout(dlg)
+        layout.setSpacing(12)
+        lbl = QLabel(
+            f"<b>RembgExporter</b> v{_APP_VERSION}<br><br>"
+            f"{_t('about_desc')}<br><br>"
+            f"<a href='{_GITHUB_URL}' style='color:#4a9eff;'>{_GITHUB_URL}</a>"
+        )
+        lbl.setWordWrap(True)
+        lbl.setOpenExternalLinks(True)
+        lbl.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        layout.addWidget(lbl)
+        btn_close = QPushButton(_t("about_close"))
+        btn_close.clicked.connect(dlg.accept)
+        layout.addWidget(btn_close)
+        dlg.exec()
 
     def _on_file_select(self, path: str) -> None:
         self._selected_file = path
