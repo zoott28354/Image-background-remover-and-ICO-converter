@@ -5,6 +5,6 @@ filetype
 click
 onnxruntime
 pyinstaller
-customtkinter
+PySide6
 svglib
 reportlab

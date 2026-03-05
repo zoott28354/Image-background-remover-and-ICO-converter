@@ -3,9 +3,11 @@
 This file contains instructions to follow every time you work on this project.
 
 ## Stack and Environment
-- **Python 3.11+** + **CustomTkinter** (dark theme, 3-column layout)
-- **rembg** for AI background removal, **ImageMagick** (portable) for ICO generation
-- **Windows-only** distribution via PyInstaller
+- **Python 3.11+** + **PySide6** (dark QSS theme, 3-column layout, LGPL)
+- **rembg** for AI background removal, **ImageMagick** for ICO generation
+  - Windows: portable bundle in `src/third-party/imagemagick/magick.exe`
+  - Linux: `sudo apt install imagemagick` | macOS: `brew install imagemagick`
+- **Windows** distribution via PyInstaller; **Linux/macOS** run from source
 - Virtual environment in `/venv` (created by `scripts/setup.bat`)
 
 ## Project Structure
