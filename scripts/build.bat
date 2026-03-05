@@ -26,7 +26,6 @@ venv\Scripts\python.exe -m PyInstaller --onefile --windowed ^
   --icon=src\assets\RembgExporter.ico ^
   --name=%EXE_NAME% ^
   --version-file=scripts\version_info.txt ^
-  --collect-all PySide6 ^
   --collect-all rembg ^
   --collect-all svglib ^
   --collect-all reportlab ^
@@ -36,6 +35,9 @@ venv\Scripts\python.exe -m PyInstaller --onefile --windowed ^
   --copy-metadata Pillow ^
   --copy-metadata numpy ^
   --hidden-import=click ^
+  --hidden-import=PySide6.QtWidgets ^
+  --hidden-import=PySide6.QtCore ^
+  --hidden-import=PySide6.QtGui ^
   --hidden-import=PySide6.QtSvg ^
   --hidden-import=PySide6.QtXml ^
   --hidden-import=PIL.ImageQt ^
