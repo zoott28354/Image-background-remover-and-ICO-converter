@@ -247,6 +247,23 @@ The version is read automatically from `scripts\version_info.txt` (e.g. `RembgEx
 
 ---
 
+## Data and storage
+
+The app does not save any configuration file — all settings reset to default on each launch.
+
+| What | Where | Notes |
+|---|---|---|
+| **AI models** (rembg) | `~/.u2net/` | Downloaded automatically on first use per model, then reused from cache. Safe to delete to free disk space (~100–200 MB per model). |
+| **Output files** | Same folder as source **or** custom folder | Chosen in the "Output destination" section before processing. |
+| **Virtual environment** | `venv/` in project root | Created by `scripts\setup.bat`. Can be deleted and recreated at any time. |
+| **PyInstaller cache** | `build/` in project root | Temporary build folder, safe to delete after building. |
+
+> **Model cache path by OS:**
+> - Windows: `C:\Users\<name>\.u2net\`
+> - Linux/macOS: `~/.u2net/`
+
+---
+
 ## Main dependencies
 
 ### Python (pip)
